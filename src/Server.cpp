@@ -1,8 +1,9 @@
 #include "Server.h"
 
-#include <iostream>
-
 #include <SFML/System.hpp>
+
+#include "net/NetManager.h"
+#include "utils/Console.h"
 
 #define PORTNUM 9966
 
@@ -10,31 +11,40 @@ void Server::run()
 {
 	init();
 
-	while(m_running) {
-		std::cout << "SERVER::TICK" << std::endl;
-		sf::sleep(sf::milliseconds(5000.0f));
+	while(m_registering && m_running) {
+		sf::sleep(sf::milliseconds(1000.0f));
+		NetManager::registerClients(m_socket, m_packet);
 	}
+
+	while(m_running) {
+		Console::print("SERVER::TICK\n");
+		NetManager::receive(m_socket, m_packet);
+		sf::sleep(sf::milliseconds(2500.0f));
+	}
+}
+
+void Server::startGame()
+{
+	sf::Lock lock(m_mutex);
+	m_registering = false;
 }
 
 void Server::shutdown()
 {
-	//std::lock_guard<std::mutex> lock(m_mutex);
-	sf::Lock lock(m_mutex);
+	sf::Lock lock(m_mutex); // sfml lock guard
 	m_running = false;
 }
 
 void Server::init()
 {
-	std::cout << "SERVER::START" << std::endl;
+	Console::print("SERVER::START\n");
 
+	m_registering = true;
 	m_running = true;
 
 	m_socket.setBlocking(false);
+	NetManager::bindSocket(m_socket, PORTNUM);
 
-	if (m_socket.bind(PORTNUM) != sf::Socket::Done){
-		std::cout << "SERVER::Could not bind socket" << std::endl;
-	}
-
-	std::cout << "public: " << sf::IpAddress::getPublicAddress() << std::endl;
-	std::cout << "local: " << sf::IpAddress::getLocalAddress() << std::endl;
+	Console::print("public: " + sf::IpAddress::getPublicAddress().toString() + "\n");
+	Console::print("local: " + sf::IpAddress::getLocalAddress().toString() + "\n");
 }

@@ -1,8 +1,9 @@
 #include "Client.h"
 
-#include <iostream>
-
 #include <SFML/System.hpp>
+
+#include "net/NetManager.h"
+#include "utils/Console.h"
 
 void Client::run()
 {
@@ -27,18 +28,21 @@ void Client::run()
 	}
 }
 
-void Client::connect(std::string &address)
+void Client::connect(std::string &address, unsigned short port)
 {
-	m_serverIp = address;
+	m_serverAddress = address;
+	m_serverPort = port;
+
+	m_socket.setBlocking(false);
+	NetManager::bindSocket(m_socket);
+	NetManager::registerToServer(m_socket, m_packet, m_serverAddress, m_serverPort);
 }
 
 void Client::init()
 {
-	sf::Socket::Status status;
-	status = m_socket.bind(sf::Socket::AnyPort);
-	if (status != sf::Socket::Done) {
-		std::cout << "CLIENT::Could not bind socket" << std::endl;
-	}
+	// m_socket.setBlocking(false);
+	// NetManager::bindSocket(m_socket);
+	// NetManager::registerToServer(m_socket, m_packet, m_serverAddress, m_serverPort);
 
-	std::cout << "CLIENT::START" << std::endl;
+	Console::print("CLIENT::START\n");
 }
