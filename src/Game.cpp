@@ -1,7 +1,6 @@
 #include "Game.h"
 
 #include <string>
-#include <thread>
 
 #include "Server.h"
 #include "Client.h"
@@ -37,8 +36,8 @@ void Game::startSingleplayer()
     serverThread.launch();
 
     Client client;
-    std::string address = "10.0.0.2";
-    client.connect(address, 9966);
+    std::string address = sf::IpAddress::getLocalAddress().toString();
+    client.connect(address, SERVER_PORTNUM);
 
     server.startGame();
 
@@ -54,13 +53,13 @@ void Game::startMultiplayerAsHost()
     sf::Thread serverThread(&Server::run, &server);
     serverThread.launch();
 
-    std::string address = "10.0.0.2";
+    std::string address = sf::IpAddress::getLocalAddress().toString();
     Client client;
-    client.connect(address, 9966);
+    client.connect(address, SERVER_PORTNUM);
 
     // wait for other clients to connect
     std::string input;
-    while(input != "start") {
+    while (input != "start") {
         input = Console::prompt();
     }
     server.startGame();
@@ -77,6 +76,6 @@ void Game::startMultiplayerAsPeer()
     std::string input = Console::prompt();
 
     Client client;
-    client.connect(input, 9966);
+    client.connect(input, SERVER_PORTNUM);
     client.run();
 }

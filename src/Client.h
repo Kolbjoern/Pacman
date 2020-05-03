@@ -5,6 +5,8 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Network.hpp>
 
+#include "net/NetManager.h"
+
 class Client
 {
 public:
@@ -17,7 +19,9 @@ private:
 	sf::RenderWindow m_window;
 	sf::UdpSocket m_socket;
 	sf::Packet m_packet;
-	sf::IpAddress m_serverAddress;
+	//sf::IpAddress m_serverAddress;
 
-	unsigned short m_serverPort;
+	//unsigned short m_serverPort;
+
+	Peer m_server;
 };

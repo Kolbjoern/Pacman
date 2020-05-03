@@ -15,9 +15,9 @@ void Client::run()
 	sf::CircleShape circle(100.0f);
 	circle.setFillColor(sf::Color::Red);
 
-	while(m_window.isOpen()) {
+	while (m_window.isOpen()) {
 		sf::Event event;
-		while(m_window.pollEvent(event)) {
+		while (m_window.pollEvent(event)) {
 			if (event.type == sf::Event::Closed) {
 				m_window.close();
 			}
@@ -30,19 +30,15 @@ void Client::run()
 
 void Client::connect(std::string &address, unsigned short port)
 {
-	m_serverAddress = address;
-	m_serverPort = port;
+	m_server.address = address;
+	m_server.port = port;
 
 	m_socket.setBlocking(false);
 	NetManager::bindSocket(m_socket);
-	NetManager::registerToServer(m_socket, m_packet, m_serverAddress, m_serverPort);
+	NetManager::registerToServer(m_socket, m_packet, m_server);
 }
 
 void Client::init()
 {
-	// m_socket.setBlocking(false);
-	// NetManager::bindSocket(m_socket);
-	// NetManager::registerToServer(m_socket, m_packet, m_serverAddress, m_serverPort);
-
 	Console::print("CLIENT::START\n");
 }

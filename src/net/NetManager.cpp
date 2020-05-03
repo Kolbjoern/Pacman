@@ -26,10 +26,10 @@ namespace NetManager
 		sf::Uint8 header;
 
 		// empty receive buffer
-		while(socket.receive(packet, sender, port) == sf::Socket::Done) {
+		while (socket.receive(packet, sender, port) == sf::Socket::Done) {
 			packet >> header;
 
-			switch(static_cast<PacketHeader>(header)) {
+			switch (static_cast<PacketHeader>(header)) {
 				case PacketHeader::Register:
 					packet.clear();
 					Console::print("Client register: " + sender.toString() + "::" + std::to_string(port) + "\n");
@@ -38,11 +38,11 @@ namespace NetManager
 		}
 	}
 
-	void registerToServer(sf::UdpSocket &socket, sf::Packet &packet, sf::IpAddress &serverAddress, unsigned short port)
+	void registerToServer(sf::UdpSocket &socket, sf::Packet &packet, Peer &server)
 	{
 		sf::Uint8 header = static_cast<int>(PacketHeader::Register);
 		packet << header;
-		socket.send(packet, serverAddress, port);
+		socket.send(packet, server.address, server.port);
 		packet.clear();
 	}
 

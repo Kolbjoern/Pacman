@@ -14,7 +14,7 @@ namespace Console
 		std::string input;
 		//std::getline(std::cin, input);
 		bool found = false;
-        while(!found) {
+        while (!found) {
             std::getline(std::cin, input);
             int len = sizeof(char*)/sizeof(validInputs[0]);
             for (int i = 0; i < len; i++) {
