@@ -2,29 +2,33 @@
 
 #include <SFML/System.hpp>
 
-#include "net/NetManager.h"
 #include "utils/Console.h"
 
 void Server::run()
 {
 	init();
 
-	while (m_registering && m_running) {
-		sf::sleep(sf::milliseconds(1000.0f));
-		NetManager::registerClients(m_socket, m_packet);
-	}
-
 	while (m_running) {
-		Console::print("SERVER::TICK\n");
-		NetManager::receive(m_socket, m_packet);
-		sf::sleep(sf::milliseconds(2500.0f));
+		switch (m_state) {
+			case ServerState::Idle:
+				Network::receive(m_socket, m_packet, m_packetStates);
+				sf::sleep(sf::milliseconds(1000.0f));
+				break;
+
+			case ServerState::Active:
+				Console::print("SERVER::TICK\n");
+				Network::receive(m_socket, m_packet, m_packetStates);
+				sf::sleep(sf::milliseconds(2500.0f));
+				break;
+		}
 	}
 }
 
-void Server::startGame()
+void Server::startGame() 
 {
 	sf::Lock lock(m_mutex);
-	m_registering = false;
+	m_state = ServerState::Active;
+	m_packetStates.connect = false;
 }
 
 void Server::shutdown()
@@ -37,11 +41,12 @@ void Server::init()
 {
 	Console::print("SERVER::START\n");
 
-	m_registering = true;
 	m_running = true;
+	m_state = ServerState::Idle;
+	m_packetStates.connect = true;
 
 	m_socket.setBlocking(false);
-	NetManager::bindSocket(m_socket, SERVER_PORTNUM);
+	Network::bindSocket(m_socket, SERVER_PORTNUM);
 
 	Console::print("public: " + sf::IpAddress::getPublicAddress().toString() + "\n");
 	Console::print("local: " + sf::IpAddress::getLocalAddress().toString() + "\n");

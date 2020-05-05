@@ -2,7 +2,6 @@
 
 #include <SFML/System.hpp>
 
-#include "net/NetManager.h"
 #include "utils/Console.h"
 
 void Client::run()
@@ -34,8 +33,8 @@ void Client::connect(std::string &address, unsigned short port)
 	m_server.port = port;
 
 	m_socket.setBlocking(false);
-	NetManager::bindSocket(m_socket);
-	NetManager::registerToServer(m_socket, m_packet, m_server);
+	Network::bindSocket(m_socket);
+	Network::registerToServer(m_socket, m_packet, m_server);
 }
 
 void Client::init()

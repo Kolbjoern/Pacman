@@ -3,6 +3,15 @@
 #include <SFML/System.hpp>
 #include <SFML/Network.hpp>
 
+#include "net/Network.h"
+#include "net/PacketManager.h"
+
+enum class ServerState : unsigned int
+{
+	Idle = 0,
+	Active = 1
+};
+
 class Server
 {
 public:
@@ -12,12 +21,13 @@ public:
 
 private:
 	void init();
-	void registering();
 
 	sf::UdpSocket m_socket;
 	sf::Packet m_packet;
 	sf::Mutex m_mutex;
 
-	bool m_registering;
+	ServerState m_state;
+	PacketStates m_packetStates;
+
 	bool m_running;
 };
