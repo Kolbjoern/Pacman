@@ -26,14 +26,22 @@ namespace Network
 		packet.clear();
 	}
 
-	void receive(sf::UdpSocket &socket, sf::Packet &packet, PacketStates &states)
+	std::vector<PacketResult> receive(sf::UdpSocket &socket, sf::Packet &packet, PacketStates &states)
 	{
 		sf::IpAddress sender;
 		unsigned short port;
+		std::vector<PacketResult> res;
 
 		// empty receive buffer
 		while (socket.receive(packet, sender, port) == sf::Socket::Done) {
-			PacketManager::processPacket(packet, sender, port, states);
+			res.push_back(PacketManager::processPacket(packet, sender, port, states));
 		}
+
+		return res;
+	}
+
+	std::string createUniqueId(sf::IpAddress& address, unsigned short port)
+	{
+		return address.toString() + ":" + std::to_string(port);
 	}
 };

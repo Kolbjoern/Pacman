@@ -10,10 +10,15 @@ void Server::run()
 
 	while (m_running) {
 		switch (m_state) {
-			case ServerState::Idle:
-				Network::receive(m_socket, m_packet, m_packetStates);
+			case ServerState::Idle: {
+				std::vector<PacketResult> result;
+				result = Network::receive(m_socket, m_packet, m_packetStates);
+				unpack(result);
+
+
 				sf::sleep(sf::milliseconds(1000.0f));
 				break;
+			}
 
 			case ServerState::Active:
 				Console::print("SERVER::TICK\n");
@@ -50,4 +55,27 @@ void Server::init()
 
 	Console::print("public: " + sf::IpAddress::getPublicAddress().toString() + "\n");
 	Console::print("local: " + sf::IpAddress::getLocalAddress().toString() + "\n");
+}
+
+void Server::unpack(std::vector<PacketResult>& r)
+{
+	for (std::vector<PacketResult>::iterator it = std::begin(r); it != std::end(r); ++it) {
+		if (it->success == true) {
+			switch (it->type) {
+				case PacketHeader::Connect: {
+					ConnectData* tp = static_cast<ConnectData*>(it->data);
+					
+					std::string uniqueId = Network::createUniqueId(tp->address, tp->port);
+
+					Peer p;
+					p.address = tp->address;
+					p.port = tp->port;
+					m_net.peers.emplace(uniqueId, p);
+
+					delete tp;
+					break;
+				}
+			}
+		}
+	}
 }

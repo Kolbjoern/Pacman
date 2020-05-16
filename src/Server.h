@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include <SFML/System.hpp>
 #include <SFML/Network.hpp>
 
@@ -21,6 +23,7 @@ public:
 
 private:
 	void init();
+	void unpack(std::vector<PacketResult>& results);
 
 	sf::UdpSocket m_socket;
 	sf::Packet m_packet;
@@ -28,6 +31,7 @@ private:
 
 	ServerState m_state;
 	PacketStates m_packetStates;
+	Net m_net;
 
 	bool m_running;
 };
