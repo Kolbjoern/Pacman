@@ -37,6 +37,11 @@ void Client::connect(std::string &address, unsigned short port)
 	Network::registerToServer(m_socket, m_packet, m_server);
 }
 
+void Client::disconnect()
+{
+	Network::disconnectFromServer(m_socket, m_packet, m_server);
+}
+
 void Client::init()
 {
 	Console::print("CLIENT::START\n");

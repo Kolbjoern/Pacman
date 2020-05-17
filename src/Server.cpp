@@ -14,15 +14,15 @@ void Server::run()
 				std::vector<PacketResult> result;
 				result = Network::receive(m_socket, m_packet, m_packetStates);
 				unpack(result);
-
-
-				sf::sleep(sf::milliseconds(1000.0f));
+				sf::sleep(sf::milliseconds(2000.0f));
 				break;
 			}
 
 			case ServerState::Active:
 				Console::print("SERVER::TICK\n");
-				Network::receive(m_socket, m_packet, m_packetStates);
+				std::vector<PacketResult> result;
+				result = Network::receive(m_socket, m_packet, m_packetStates);
+				unpack(result);
 				sf::sleep(sf::milliseconds(2500.0f));
 				break;
 		}
@@ -72,6 +72,20 @@ void Server::unpack(std::vector<PacketResult>& r)
 					p.port = tp->port;
 					m_net.peers.emplace(uniqueId, p);
 
+					Console::print("Num peers: " + std::to_string(m_net.peers.size()) + "\n");
+					delete tp;
+					break;
+				}
+
+				case PacketHeader::Disconnect: {
+					ConnectData* tp = static_cast<ConnectData*>(it->data);
+
+					std::string uniqueId = Network::createUniqueId(tp->address, tp->port);
+
+					if (Network::peerExists(m_net.peers, uniqueId)) {
+						m_net.peers.erase(uniqueId);
+					}
+					Console::print("Num peers: " + std::to_string(m_net.peers.size()) + "\n");
 					delete tp;
 					break;
 				}

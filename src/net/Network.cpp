@@ -26,6 +26,14 @@ namespace Network
 		packet.clear();
 	}
 
+	void disconnectFromServer(sf::UdpSocket& socket, sf::Packet& packet, Peer& server)
+	{
+		sf::Uint8 header = static_cast<int>(PacketHeader::Disconnect);
+		packet << header;
+		socket.send(packet, server.address, server.port);
+		packet.clear();
+	}
+
 	std::vector<PacketResult> receive(sf::UdpSocket &socket, sf::Packet &packet, PacketStates &states)
 	{
 		sf::IpAddress sender;
@@ -43,5 +51,10 @@ namespace Network
 	std::string createUniqueId(sf::IpAddress& address, unsigned short port)
 	{
 		return address.toString() + ":" + std::to_string(port);
+	}
+
+	bool peerExists(std::unordered_map<std::string, Peer>& peers, std::string& uniqueId)
+	{
+		return peers.find(uniqueId) != peers.end();
 	}
 };

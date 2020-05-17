@@ -78,4 +78,6 @@ void Game::startMultiplayerAsPeer()
     Client client;
     client.connect(input, SERVER_PORTNUM);
     client.run();
+
+    client.disconnect();
 }

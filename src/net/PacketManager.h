@@ -4,7 +4,8 @@
 
 enum class PacketHeader : unsigned short int
 {
-	Connect = 0
+	Connect = 0,
+	Disconnect = 1
 };
 
 struct PacketStates
@@ -28,5 +29,6 @@ struct ConnectData
 namespace PacketManager
 {
 	PacketResult processPacket(sf::Packet &packet, sf::IpAddress &address, unsigned short port, PacketStates &states);
-	PacketResult registerClient(sf::IpAddress &address, unsigned short port);
+	PacketResult processConnect(sf::IpAddress &address, unsigned short port);
+	PacketResult processDisconnect(sf::IpAddress &address, unsigned short port);
 };
