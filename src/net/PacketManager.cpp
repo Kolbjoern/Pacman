@@ -4,7 +4,7 @@
 
 namespace PacketManager
 {
-	PacketResult processPacket(sf::Packet &packet, sf::IpAddress &address, unsigned short port, PacketStates &states)
+	PacketResult processPacket(sf::Packet& packet, sf::IpAddress& address, unsigned short port, PacketStates& states)
 	{
 		sf::Uint8 header;
 		packet >> header;
@@ -26,7 +26,7 @@ namespace PacketManager
 		return res;
 	}
 
-	PacketResult processConnect(sf::IpAddress &address, unsigned short port)
+	PacketResult processConnect(sf::IpAddress& address, unsigned short port)
 	{
 		Console::print("Client register: " + address.toString() + "::" + std::to_string(port) + "\n");
 
@@ -43,7 +43,7 @@ namespace PacketManager
 		return result;
 	}
 
-	PacketResult processDisconnect(sf::IpAddress &address, unsigned short port)
+	PacketResult processDisconnect(sf::IpAddress& address, unsigned short port)
 	{
 		Console::print("Client disconnected: " + std::to_string(port) + "\n");
 

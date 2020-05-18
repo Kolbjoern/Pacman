@@ -28,7 +28,7 @@ struct ConnectData
 
 namespace PacketManager
 {
-	PacketResult processPacket(sf::Packet &packet, sf::IpAddress &address, unsigned short port, PacketStates &states);
-	PacketResult processConnect(sf::IpAddress &address, unsigned short port);
-	PacketResult processDisconnect(sf::IpAddress &address, unsigned short port);
+	PacketResult processPacket(sf::Packet& packet, sf::IpAddress& address, unsigned short port, PacketStates& states);
+	PacketResult processConnect(sf::IpAddress& address, unsigned short port);
+	PacketResult processDisconnect(sf::IpAddress& address, unsigned short port);
 };

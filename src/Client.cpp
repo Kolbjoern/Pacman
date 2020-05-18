@@ -27,7 +27,7 @@ void Client::run()
 	}
 }
 
-void Client::connect(std::string &address, unsigned short port)
+void Client::connect(std::string& address, unsigned short port)
 {
 	m_server.address = address;
 	m_server.port = port;

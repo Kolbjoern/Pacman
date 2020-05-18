@@ -4,7 +4,7 @@
 
 namespace Console
 {
-	void print(const std::string &text)
+	void print(const std::string& text)
 	{
 		std::cout << text;
 	}

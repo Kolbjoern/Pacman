@@ -1,7 +1,5 @@
 #include "Server.h"
 
-#include <SFML/System.hpp>
-
 #include "utils/Console.h"
 
 void Server::run()

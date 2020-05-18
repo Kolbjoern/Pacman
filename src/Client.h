@@ -11,7 +11,7 @@ class Client
 {
 public:
 	void run();
-	void connect(std::string &address, unsigned short port);
+	void connect(std::string& address, unsigned short port);
 	void disconnect();
 
 private:

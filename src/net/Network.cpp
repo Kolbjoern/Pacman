@@ -4,12 +4,12 @@
 
 namespace Network
 {
-	void bindSocket(sf::UdpSocket &socket)
+	void bindSocket(sf::UdpSocket& socket)
 	{
 		bindSocket(socket, sf::Socket::AnyPort);
 	}
 
-	void bindSocket(sf::UdpSocket &socket, unsigned short port)
+	void bindSocket(sf::UdpSocket& socket, unsigned short port)
 	{
 		sf::Socket::Status status;
 		status = socket.bind(port);
@@ -18,7 +18,7 @@ namespace Network
 		}
 	}
 
-	void registerToServer(sf::UdpSocket &socket, sf::Packet &packet, Peer &server)
+	void registerToServer(sf::UdpSocket& socket, sf::Packet& packet, Peer& server)
 	{
 		sf::Uint8 header = static_cast<int>(PacketHeader::Connect);
 		packet << header;
@@ -34,7 +34,7 @@ namespace Network
 		packet.clear();
 	}
 
-	std::vector<PacketResult> receive(sf::UdpSocket &socket, sf::Packet &packet, PacketStates &states)
+	std::vector<PacketResult> receive(sf::UdpSocket& socket, sf::Packet& packet, PacketStates& states)
 	{
 		sf::IpAddress sender;
 		unsigned short port;
