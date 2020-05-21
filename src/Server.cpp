@@ -30,6 +30,12 @@ void Server::run()
 void Server::startGame() 
 {
 	sf::Lock lock(m_mutex);
+
+	// clear receive buffer first
+	std::vector<PacketResult> result;
+	result = Network::receive(m_socket, m_packet, m_packetStates);
+	unpack(result);
+	
 	m_state = ServerState::Active;
 	m_packetStates.connect = false;
 }
