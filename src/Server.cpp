@@ -64,36 +64,43 @@ void Server::init()
 void Server::unpack(std::vector<PacketResult>& r)
 {
 	for (std::vector<PacketResult>::iterator it = std::begin(r); it != std::end(r); ++it) {
-		if (it->success == true) {
-			switch (it->type) {
-				case PacketHeader::Connect: {
-					ConnectData* tp = static_cast<ConnectData*>(it->data);
-					
-					std::string uniqueId = Network::createUniqueId(tp->address, tp->port);
+		unpack(*it);
+	}
+}
 
-					Peer p;
-					p.address = tp->address;
-					p.port = tp->port;
-					m_net.peers.emplace(uniqueId, p);
+void Server::unpack(PacketResult& result)
+{
+	if (result.success == false) {
+		return;
+	}
+	
+	switch (result.type) {
+		case PacketHeader::Connect: {
+			ConnectData* tp = static_cast<ConnectData*>(result.data);
+			
+			std::string uniqueId = Network::createUniqueId(tp->address, tp->port);
 
-					Console::print("Num peers: " + std::to_string(m_net.peers.size()) + "\n");
-					delete tp;
-					break;
-				}
+			Peer p;
+			p.address = tp->address;
+			p.port = tp->port;
+			m_net.peers.emplace(uniqueId, p);
 
-				case PacketHeader::Disconnect: {
-					ConnectData* tp = static_cast<ConnectData*>(it->data);
+			Console::print("Num peers: " + std::to_string(m_net.peers.size()) + "\n");
+			delete tp;
+			break;
+		}
 
-					std::string uniqueId = Network::createUniqueId(tp->address, tp->port);
+		case PacketHeader::Disconnect: {
+			ConnectData* tp = static_cast<ConnectData*>(result.data);
 
-					if (Network::peerExists(m_net.peers, uniqueId)) {
-						m_net.peers.erase(uniqueId);
-					}
-					Console::print("Num peers: " + std::to_string(m_net.peers.size()) + "\n");
-					delete tp;
-					break;
-				}
+			std::string uniqueId = Network::createUniqueId(tp->address, tp->port);
+
+			if (Network::peerExists(m_net.peers, uniqueId)) {
+				m_net.peers.erase(uniqueId);
 			}
+			Console::print("Num peers: " + std::to_string(m_net.peers.size()) + "\n");
+			delete tp;
+			break;
 		}
 	}
 }

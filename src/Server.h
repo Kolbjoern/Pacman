@@ -24,6 +24,7 @@ public:
 private:
 	void init();
 	void unpack(std::vector<PacketResult>& results);
+	void unpack(PacketResult& result);
 
 	sf::UdpSocket m_socket;
 	sf::Packet m_packet;
