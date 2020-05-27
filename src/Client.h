@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <functional>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Network.hpp>
@@ -11,11 +12,14 @@ class Client
 {
 public:
 	void run();
-	void connect(std::string& address, unsigned short port);
-	void disconnect();
+	void serverCall(std::function<void(void)> callback);
 
 private:
 	void init();
+	void connect(std::string& address, unsigned short port);
+	void disconnect();
+
+	std::function<void(void)> m_startServer;
 
 	sf::RenderWindow m_window;
 	sf::UdpSocket m_socket;

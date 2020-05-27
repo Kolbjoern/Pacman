@@ -18,11 +18,12 @@ class Server
 {
 public:
 	void run();
-	void startGame();
 	void shutdown();
+	bool isRunning();
 
 private:
 	void init();
+	void startGame();
 	void unpack(std::vector<PacketResult>& results);
 	void unpack(PacketResult& result);
 

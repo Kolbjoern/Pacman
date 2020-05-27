@@ -44,6 +44,12 @@ void Server::shutdown()
 {
 	sf::Lock lock(m_mutex); // sfml lock guard
 	m_running = false;
+	m_socket.unbind();
+}
+
+bool Server::isRunning()
+{
+	return m_running;
 }
 
 void Server::init()
